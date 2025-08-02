@@ -1,0 +1,20 @@
+CODE FLOW DIAGRAM
+==================================================
+
+flowchart TD
+    START([Program Start])
+    FUNC_0[Function: hello_world]
+    START --> FUNC_0
+    CALL_0_0[Call: print]
+    FUNC_0 --> CALL_0_0
+    END([Program End])
+    START --> END
+
+    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    class START,END startEnd
+
+
+==================================================
+Generated at: 2025-08-02 02:23:37

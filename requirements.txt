@@ -1,0 +1,28 @@
+# Core FastAPI
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+jinja2==3.1.2
+python-multipart==0.0.6
+
+# Streamlit frontend
+streamlit==1.28.0
+streamlit-ace==0.1.1
+
+# OpenAI for AI functionality
+openai==1.3.0
+
+# Code analysis
+black==23.11.0
+flake8==6.1.0
+bandit==1.7.5
+radon==6.0.1
+
+# System monitoring
+psutil==5.9.6
+
+# HTTP requests
+requests==2.31.0
+httpx==0.25.2
+
+# Environment management
+python-dotenv==1.0.0

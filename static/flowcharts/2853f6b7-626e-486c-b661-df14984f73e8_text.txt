@@ -1,0 +1,92 @@
+CODE FLOW DIAGRAM
+==================================================
+
+flowchart TD
+    START([Program Start])
+    IMPORTS[Import Libraries]
+    START --> IMPORTS
+    CLASS_0[Class: AIChatbot]
+    IMPORTS --> CLASS_0
+    FUNC_0[Function: __init__]
+    CLASS_0 --> FUNC_0
+    CALL_0_0[Call: getenv]
+    FUNC_0 --> CALL_0_0
+    CALL_0_1[Call: print]
+    FUNC_0 --> CALL_0_1
+    CALL_0_2[Call: OpenAI]
+    FUNC_0 --> CALL_0_2
+    CALL_0_3[Call: print]
+    FUNC_0 --> CALL_0_3
+    FUNC_1[Function: _generate_suggestions]
+    CLASS_0 --> FUNC_1
+    CALL_1_0[Call: append]
+    FUNC_1 --> CALL_1_0
+    CALL_1_1[Call: append]
+    FUNC_1 --> CALL_1_1
+    CALL_1_2[Call: lower]
+    FUNC_1 --> CALL_1_2
+    CALL_1_3[Call: append]
+    FUNC_1 --> CALL_1_3
+    CALL_1_4[Call: append]
+    FUNC_1 --> CALL_1_4
+    CALL_1_5[Call: append]
+    FUNC_1 --> CALL_1_5
+    CALL_1_6[Call: append]
+    FUNC_1 --> CALL_1_6
+    CALL_1_7[Call: lower]
+    FUNC_1 --> CALL_1_7
+    CALL_1_8[Call: lower]
+    FUNC_1 --> CALL_1_8
+    CALL_1_9[Call: lower]
+    FUNC_1 --> CALL_1_9
+    CALL_1_10[Call: lower]
+    FUNC_1 --> CALL_1_10
+    FUNC_2[Function: get_conversation_history]
+    CLASS_0 --> FUNC_2
+    CALL_2_0[Call: get]
+    FUNC_2 --> CALL_2_0
+    FUNC_3[Function: clear_conversation]
+    CLASS_0 --> FUNC_3
+    CTRL_0{If}
+    CLASS_0 --> CTRL_0
+    CTRL_1{If}
+    CLASS_0 --> CTRL_1
+    CTRL_2{If}
+    CLASS_0 --> CTRL_2
+    CTRL_3{If}
+    CLASS_0 --> CTRL_3
+    CTRL_4{If}
+    CLASS_0 --> CTRL_4
+    CTRL_5{If}
+    CLASS_0 --> CTRL_5
+    CTRL_6{If}
+    CLASS_0 --> CTRL_6
+    CTRL_7{If}
+    CLASS_0 --> CTRL_7
+    CTRL_8{If}
+    CLASS_0 --> CTRL_8
+    CTRL_9{If}
+    CLASS_0 --> CTRL_9
+    CTRL_10{If}
+    CLASS_0 --> CTRL_10
+    CTRL_11{For}
+    CLASS_0 --> CTRL_11
+    CTRL_12{If}
+    CLASS_0 --> CTRL_12
+    CTRL_13{If}
+    CLASS_0 --> CTRL_13
+    CTRL_14{If}
+    CLASS_0 --> CTRL_14
+    CTRL_15{If}
+    CLASS_0 --> CTRL_15
+    END([Program End])
+    CLASS_0 --> END
+
+    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    class START,END startEnd
+
+
+==================================================
+Generated at: 2025-08-02 02:39:40

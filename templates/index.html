@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Assistant</title>
+    
+    <!-- Mermaid.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        h1 { color: #333; text-align: center; }
+        .code-area { width: 100%; height: 200px; font-family: monospace; padding: 10px; border: 1px solid #ddd; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .btn:hover { background: #0056b3; }
+        .btn.demo { background: #28a745; }
+        .btn.demo:hover { background: #218838; }
+        .result { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; }
+        .demo-input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+        .loading { color: #666; font-style: italic; }
+        
+        /* Mermaid diagram styles */
+        .mermaid-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .mermaid {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Code Assistant</h1>
+        
+        <div>
+            <h3>Code Editor</h3>
+            <textarea id="codeInput" class="code-area" placeholder="Paste your code here...">
+def hello_world():
+    print("Hello, World!")
+
+hello_world()
+            </textarea>
+            
+            <div>
+                <select id="languageSelect">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                </select>
+                
+                <button class="btn" onclick="analyzeCode()">🔍 Analyze</button>
+                <button class="btn" onclick="refactorCode()">⚡ Refactor</button>
+                <button class="btn" onclick="generateFlowchart()" style="background: #6f42c1;">📊 Flow Chart</button>
+                <button class="btn" onclick="chatWithAI()">💬 Chat</button>
+                <button class="btn demo" onclick="runDemo()">▶️ Run Code</button>
+            </div>
+            
+            <!-- Demo Input Area -->
+            <div id="demoInputArea" style="display: none; margin-top: 15px;">
+                <h4>Code Input (optional):</h4>
+                <input type="text" id="demoInput" class="demo-input" placeholder="Enter input for your code (if needed)...">
+            </div>
+        </div>
+        
+        <div id="results" class="result" style="display: none;">
+            <h3>Results</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+
+        async function analyzeCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            showResult('Analysis', '<div class="loading">Analyzing code...</div>');
+            
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({code, language})
+                });
+                
+                const result = await response.json();
+                showResult('Analysis Results', '<pre>' + JSON.stringify(result, null, 2) + '</pre>');
+            } catch (error) {
+                showResult('Error', error.message);
+            }
+        }
+        
+        async function refactorCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            showResult('Refactor', '<div class="loading">Refactoring code...</div>');
+            
+            try {
+                const response = await fetch('/api/refactor', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({code, language, refactor_type: 'general'})
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    let output = '<h4>✅ Refactoring Complete</h4>';
+                    output += '<h5>Original Code:</h5><pre>' + code + '</pre>';
+                    output += '<h5>Refactored Code:</h5><pre>' + result.refactored_code + '</pre>';
+                    if (result.improvements) {
+                        output += '<h5>Improvements:</h5><ul>';
+                        result.improvements.forEach(imp => {
+                            output += '<li>' + imp + '</li>';
+                        });
+                        output += '</ul>';
+                    }
+                    showResult('Refactor Results', output);
+                } else {
+                    showResult('Refactor Results', '<pre>' + JSON.stringify(result, null, 2) + '</pre>');
+                }
+            } catch (error) {
+                showResult('Error', error.message);
+            }
+        }
+        
+        async function generateFlowchart() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            showResult('Flow Chart', '<div class="loading">🎨 Generating flowchart...</div>');
+            
+            try {
+                const response = await fetch('/api/flowchart', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({code, language})
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    let output = '<h4>📊 Code Flow Diagram</h4>';
+                    
+                    // Create unique ID for this diagram
+                    const diagramId = 'mermaid-' + Date.now();
+                    
+                    output += '<div class="mermaid-container">';
+                    output += '<div class="mermaid" id="' + diagramId + '">' + result.mermaid_code + '</div>';
+                    output += '</div>';
+                    
+                    if (result.structure) {
+                        output += '<details style="margin-top: 15px;">';
+                        output += '<summary><strong>📋 Code Structure Details</strong></summary>';
+                        output += '<pre style="margin-top: 10px;">' + JSON.stringify(result.structure, null, 2) + '</pre>';
+                        output += '</details>';
+                    }
+                    
+                    showResult('Flow Chart Results', output);
+                    
+                    // Re-initialize Mermaid for the new diagram
+                    setTimeout(() => {
+                        mermaid.init(undefined, '#' + diagramId);
+                    }, 100);
+                    
+                } else {
+                    showResult('Flow Chart Error', result.error || 'Unknown error occurred');
+                }
+            } catch (error) {
+                showResult('Flow Chart Error', 'Failed to generate flowchart: ' + error.message);
+            }
+        }
+        
+        async function chatWithAI() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            let userMessage = prompt("💬 Ask AI assistant about your code:\n\nExamples:\n- 'How can I improve this code?'\n- 'Are there any security issues?'\n- 'Explain what this code does'\n- 'What errors do you see?'");
+            
+            if (!userMessage || userMessage.trim() === '') return;
+            
+            // Kodu mesajla birlikte gönder
+            const fullMessage = `${userMessage}\n\nHere's my code (${language}):\n\`\`\`${language}\n${code}\n\`\`\``;
+            
+            showResult('AI Chat', '<div class="loading">AI is thinking...</div>');
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        message: fullMessage,
+                        conversation_id: 'web-chat-' + Date.now()
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    let output = '<h4>🤖 AI Response:</h4>';
+                    output += '<p><strong>Your Question:</strong> ' + userMessage + '</p>';
+                    output += '<div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 10px 0;">';
+                    output += '<strong>AI Answer:</strong><br>' + result.response.replace(/\n/g, '<br>');
+                    output += '</div>';
+                    
+                    if (result.suggestions && result.suggestions.length > 0) {
+                        output += '<h5>💡 Suggestions:</h5><ul>';
+                        result.suggestions.forEach(suggestion => {
+                            output += '<li>' + suggestion + '</li>';
+                        });
+                        output += '</ul>';
+                    }
+                    
+                    showResult('AI Chat Response', output);
+                } else {
+                    showResult('Chat Error', '<pre>' + JSON.stringify(result, null, 2) + '</pre>');
+                }
+            } catch (error) {
+                showResult('Chat Error', 'Failed to connect to AI: ' + error.message);
+            }
+        }
+        
+        async function runDemo() {
+            const code = document.getElementById('codeInput').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            // Show input area for user input
+            document.getElementById('demoInputArea').style.display = 'block';
+            
+            const inputData = document.getElementById('demoInput').value;
+            
+            showResult('Code Execution', '<div class="loading">⚡ Running your code...</div>');
+            
+            try {
+                const response = await fetch('/api/demo/run', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        code: code,
+                        language: language,
+                        input_data: inputData || null
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    let output = '<h4>🚀 Execution Results</h4>';
+                    output += '<p><strong>Language:</strong> ' + language + '</p>';
+                    
+                    if (result.output) {
+                        output += '<h5>📤 Output:</h5><pre style="background: #000; color: #0f0; padding: 10px; border-radius: 5px;">' + result.output + '</pre>';
+                    } else {
+                        output += '<p><em>No output produced</em></p>';
+                    }
+                    
+                    if (result.errors) {
+                        output += '<h5>❌ Errors:</h5><pre style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px;">' + result.errors + '</pre>';
+                    }
+                    
+                    if (result.execution_time) {
+                        output += '<p><strong>⏱️ Execution Time:</strong> ' + result.execution_time + '</p>';
+                    }
+                    
+                    if (result.exit_code !== undefined) {
+                        const status = result.exit_code === 0 ? '✅ Success' : '❌ Failed';
+                        output += '<p><strong>Status:</strong> ' + status + ' (Exit Code: ' + result.exit_code + ')</p>';
+                    }
+                    
+                    showResult('Demo Results', output);
+                } else {
+                    showResult('Execution Error', result.error || 'Unknown error occurred');
+                }
+            } catch (error) {
+                showResult('Demo Error', 'Failed to execute code: ' + error.message);
+            }
+        }
+        
+        function showResult(title, content) {
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('resultContent').innerHTML = '<h4>' + title + '</h4>' + content;
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Auto-hide demo input when language changes
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            document.getElementById('demoInputArea').style.display = 'none';
+            document.getElementById('demoInput').value = '';
+        });
+    </script>
+</body>
+</html>
