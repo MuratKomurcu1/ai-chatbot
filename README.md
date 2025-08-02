@@ -52,7 +52,7 @@ Option 1: Docker (Recommended)
 bash# Pull and run the latest image
 docker run -p 8000:8000 jantimurat/code_assistant
 
-# Or with environment variables
+Or with environment variables
 docker run -p 8000:8000 -e OPENAI_API_KEY=your_key_here jantimurat/code_assistant
 Option 2: Local Development
 bash# Clone the repository
