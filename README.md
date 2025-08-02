@@ -59,20 +59,20 @@ bash# Clone the repository
 git clone https://github.com/yourusername/ai-code-assistant
 cd ai-code-assistant
 
-# Create virtual environment
+Create virtual environment
 python -m venv myenv
 source myenv/bin/activate  # Linux/Mac
-# or
+or
 myenv\Scripts\activate     # Windows
 
-# Install dependencies
+Install dependencies
 pip install -r requirements.txt
 
-# Set up environment
+Set up environment
 cp .env.example .env
-# Edit .env with your OpenAI API key
+Edit .env with your OpenAI API key
 
-# Run the application
+Run the application
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 Option 3: Docker Compose
 bash# Clone and start all services
