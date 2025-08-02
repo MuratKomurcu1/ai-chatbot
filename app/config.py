@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-# .env dosyasını yükle
+
 load_dotenv()
 class Settings:
     APP_NAME: str = "AI Code Assistant"
@@ -11,5 +11,6 @@ class Settings:
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-# Bu satır eksikti!
+
 settings = Settings()
+
