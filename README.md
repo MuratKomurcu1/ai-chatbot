@@ -56,7 +56,7 @@ Or with environment variables
 docker run -p 8000:8000 -e OPENAI_API_KEY=your_key_here jantimurat/code_assistant
 Option 2: Local Development
 bash# Clone the repository
-git clone https://github.com/yourusername/ai-code-assistant
+git clone https://github.com/MuratKomurcu1/ai-code-assistant
 cd ai-code-assistant
 
 Create virtual environment
@@ -76,7 +76,7 @@ Run the application
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 Option 3: Docker Compose
 bash# Clone and start all services
-git clone https://github.com/yourusername/ai-code-assistant
+git clone https://github.com/MuratKomurcu1/ai-code-assistant
 cd ai-code-assistant
 docker-compose up -d
 
